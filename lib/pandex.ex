@@ -122,7 +122,7 @@ defmodule Pandex do
   """
   def convert_string(string, from \\ "markdown", to \\ "html", _options \\ []) do
     if !File.dir?(".temp"), do: File.mkdir ".temp"
-    name = ".temp/" <> random_name
+    name = ".temp/" <> random_name()
     File.write name, string
     {output,_} = System.cmd "pandoc", [name , "--from=#{from}" , "--to=#{to}"]
     File.rm name
@@ -138,12 +138,12 @@ defmodule Pandex do
   end
 
   defp random_name do
-    random_string <> "-" <> timestamp <> ".temp"
+    random_string() <> "-" <> timestamp() <> ".temp"
   end
 
   defp random_string do
-    :random.seed(:erlang.monotonic_time, :erlang.time_offset, :erlang.unique_integer)
-    0x100000000000000 |> :random.uniform |> Integer.to_string(36) |> String.downcase
+    :rand.seed(:exsplus, {:erlang.monotonic_time, :erlang.time_offset, :erlang.unique_integer})
+    0x100000000000000 |> :rand.uniform |> Integer.to_string(36) |> String.downcase
   end
 
   defp timestamp do

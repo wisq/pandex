@@ -11,9 +11,9 @@ defmodule Pandex.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      docs: [extras: ["README.md"]],
-     description: description,
-     package: package,
-     deps: deps
+     description: description(),
+     package: package(),
+     deps: deps()
     ]
   end
 
