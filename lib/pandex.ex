@@ -157,8 +157,7 @@ defmodule Pandex do
   `convert_string` works under the hood of all the other string conversion functions.
   """
   def convert_string(string, from \\ "markdown", to \\ "html", _options \\ []) do
-    if !File.dir?(".temp"), do: File.mkdir(".temp")
-    name = ".temp/" <> random_name()
+    {:ok, name} = Briefly.create()
     File.write(name, string)
     {output, _} = System.cmd("pandoc", [name, "--from=#{from}", "--to=#{to}"])
     File.rm(name)
@@ -171,23 +170,5 @@ defmodule Pandex do
   def convert_file(file, from \\ "markdown", to \\ "html", _options \\ []) do
     {output, _} = System.cmd("pandoc", [file, "--from=#{from}", "--to=#{to}"])
     {:ok, output}
-  end
-
-  defp random_name do
-    random_string() <> "-" <> timestamp() <> ".temp"
-  end
-
-  defp random_string do
-    :rand.seed(
-      :exsplus,
-      {:erlang.monotonic_time(), :erlang.time_offset(), :erlang.unique_integer()}
-    )
-
-    0x100000000000000 |> :rand.uniform() |> Integer.to_string(36) |> String.downcase()
-  end
-
-  defp timestamp do
-    {megasec, sec, _microsec} = :os.timestamp()
-    (megasec * 1_000_000 + sec) |> Integer.to_string()
   end
 end

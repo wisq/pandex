@@ -1,3 +1,4 @@
 %{
+  "briefly": {:hex, :briefly, "0.3.0", "16e6b76d2070ebc9cbd025fa85cf5dbaf52368c4bd896fb482b5a6b95a540c2f", [:mix], [], "hexpm"},
   "ex_doc": {:hex, :ex_doc, "0.9.0", "e59f4550dc78a07b1d3d81b8728fda772cfb0d54bccf1d7e6bcaab32c01c1f3a", [:mix], [{:earmark, "~> 0.1.17 or ~> 0.2", [hex: :earmark, repo: "hexpm", optional: true]}], "hexpm"},
 }

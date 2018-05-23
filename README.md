@@ -1,6 +1,6 @@
 # Pandex
 
-Pandex is a lightweight Elixir wrapper for [Pandoc](http://pandoc.org). Pandex has no dependencies other than Pandoc itself.
+Pandex is a lightweight Elixir wrapper for [Pandoc](http://pandoc.org).
 
 Pandex enables you to perform any combination of the conversions below:
 
