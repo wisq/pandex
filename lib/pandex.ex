@@ -1,9 +1,45 @@
 defmodule Pandex do
-  @readers ["markdown", "markdown_github", "markdown_strict", "markdown_mmd", "markdown_phpextra", "commonmark", "json", "rst", "textile", "html", "latex"]
-  @writers [ "json", "html", "html5", "s5", "slidy", "dzslides", "docbook", "man",
-            "opendocument", "latex", "beamer", "context", "texinfo", "markdown",
-            "markdown_github", "markdown_strict", "markdown_mmd", "markdown_phpextra", "commonmark",
-            "plain", "rst", "mediawiki", "textile", "rtf", "org", "asciidoc" ]
+  @readers [
+    "markdown",
+    "markdown_github",
+    "markdown_strict",
+    "markdown_mmd",
+    "markdown_phpextra",
+    "commonmark",
+    "json",
+    "rst",
+    "textile",
+    "html",
+    "latex"
+  ]
+  @writers [
+    "json",
+    "html",
+    "html5",
+    "s5",
+    "slidy",
+    "dzslides",
+    "docbook",
+    "man",
+    "opendocument",
+    "latex",
+    "beamer",
+    "context",
+    "texinfo",
+    "markdown",
+    "markdown_github",
+    "markdown_strict",
+    "markdown_mmd",
+    "markdown_phpextra",
+    "commonmark",
+    "plain",
+    "rst",
+    "mediawiki",
+    "textile",
+    "rtf",
+    "org",
+    "asciidoc"
+  ]
 
   @moduledoc ~S"""
 
@@ -99,9 +135,9 @@ defmodule Pandex do
 
   """
 
-  Enum.each @readers, fn (reader) ->
-    Enum.each @writers, fn (writer) ->
-      #function names are atoms. Hence converting String to Atom here. You can also use:
+  Enum.each(@readers, fn reader ->
+    Enum.each(@writers, fn writer ->
+      # function names are atoms. Hence converting String to Atom here. You can also use:
       # `name = reader <> "_to_" <> writer |> String.to_atom`
       # convert a string from one format to another.
       # Example: markdown_to_html5 "# Title \n\n## List\n\n- one\n- two\n- three\n"
@@ -114,26 +150,26 @@ defmodule Pandex do
       def unquote(:"#{reader}_file_to_#{writer}")(file) do
         convert_file(file, unquote(reader), unquote(writer))
       end
-    end
-  end
+    end)
+  end)
 
   @doc """
   `convert_string` works under the hood of all the other string conversion functions.
   """
   def convert_string(string, from \\ "markdown", to \\ "html", _options \\ []) do
-    if !File.dir?(".temp"), do: File.mkdir ".temp"
+    if !File.dir?(".temp"), do: File.mkdir(".temp")
     name = ".temp/" <> random_name()
-    File.write name, string
-    {output,_} = System.cmd "pandoc", [name , "--from=#{from}" , "--to=#{to}"]
-    File.rm name
+    File.write(name, string)
+    {output, _} = System.cmd("pandoc", [name, "--from=#{from}", "--to=#{to}"])
+    File.rm(name)
     {:ok, output}
   end
 
   @doc """
   `convert_file` works under the hood of all the other functions.
   """
-  def convert_file(file, from \\ "markdown", to \\ "html", _options \\ [] ) do
-    {output,_} = System.cmd "pandoc", [file , "--from=#{from}" , "--to=#{to}"]
+  def convert_file(file, from \\ "markdown", to \\ "html", _options \\ []) do
+    {output, _} = System.cmd("pandoc", [file, "--from=#{from}", "--to=#{to}"])
     {:ok, output}
   end
 
@@ -142,12 +178,16 @@ defmodule Pandex do
   end
 
   defp random_string do
-    :rand.seed(:exsplus, {:erlang.monotonic_time, :erlang.time_offset, :erlang.unique_integer})
-    0x100000000000000 |> :rand.uniform |> Integer.to_string(36) |> String.downcase
+    :rand.seed(
+      :exsplus,
+      {:erlang.monotonic_time(), :erlang.time_offset(), :erlang.unique_integer()}
+    )
+
+    0x100000000000000 |> :rand.uniform() |> Integer.to_string(36) |> String.downcase()
   end
 
   defp timestamp do
-    {megasec, sec, _microsec} = :os.timestamp
-    megasec*1_000_000 + sec |> Integer.to_string()
+    {megasec, sec, _microsec} = :os.timestamp()
+    (megasec * 1_000_000 + sec) |> Integer.to_string()
   end
 end
